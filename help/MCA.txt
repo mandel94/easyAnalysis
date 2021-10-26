@@ -1,0 +1,89 @@
+Multiple Correspondence Analysis is a technique of analysis widely used in a variety of 
+research fields (typically in social and behavioural sciences), as a way to find associations in categorical data. 
+A typical application is with survey responses, in which each feature corresponds
+to one survey questions, each one admitting a limited set of responses (just 'yes/no' in
+for binary questions). 
+
+
+Biplot
+
+Graphical inspection in the context of MCA is generally performed through a biplot. 
+A biplot (Gabriel, 1971) is an exploratory graph, used to represent a data matrix 
+more comprehensible, synthetic way. The original data matrix 
+(m observation x n responses) is decomposed using SVD (Single Value Decomposition).
+This decomposition of allows to extract the two fundamental ingredients of biplots:
+	- on the one side, a set of biplot points;
+	- one the one side, a set of biplot axis;
+
+Biplot points are then represented in the space outlined by biplot axis (in mathematical
+terms, we say that biplot points are projected onto biplot axis). 
+That is, we are looking at the original data, but from a different perspective. 
+The great thing about SVD is that it results in an efficient representation of the data. 
+Indeed, SVD garantees that extracted biplot axes are sorted by how good they explain
+the original data. This means that I can represent most of the information in 
+the original data only using the first few dimensions resulting from the original
+matrix decomposition. 
+
+How to interpret a biplot? 
+- Angle between two biplot points --> the smaller it is, the more those points are 
+  correlated (those points represent observation if their are row vectors,
+              variables if they are column vectors). Angles of 90* show no correlation,
+              while angles greater than 90* show negative correlation.
+- Biplot vector length --> The longer the vector on the biplot is, the better  
+                           the corresponding entity (observation or variable) is represented on the graph. 
+
+Biplot points (coordinates) are obtained with the results of the SVD, and refer to 
+rows or columns depending on which of the sub-matrices we multiply for computing 
+those points (one sub-matrix refer to rows, the other to columns). 
+
+We can sum up it this way. Correspondence Analysis (CA) is based on an algebrical
+decomposition (SVD) of a transformed version of the original data matrix. 
+The results of this decomposition are used for computing biplot coordinates (points),
+depending on which sub-matrix resulting from the SVD is used. 
+The final coordinates are a better representation of the original data, and can be used 
+for representing the data in a lower dimensional space. 
+
+Interpretation of inertia:
+The higher the inertia, the stronger the fit of the model (it's ability to explain
+the variance). The singular value indicate how much a given dimension contributes 
+to the explanation of such inertia.  
+
+Interpretation of Chi-square:
+it is used for testing the statistical significance of the association between
+two categorical variables. 
+
+
+
+MCA is an extension of Corresponding analysis to the case of multi-categorical data. 
+THe data matrix ingested by MCA can include both binary and multi-category variables.
+For this reason it is known as a multi-way contingency table. 
+This multi-way table needs first to be converted into an indicator matrix,
+that can be than subject to a Correspondence Analysis. Dependending on which matrix
+we choose for applying the CA, MCA will lead to slightly different results. 
+At this regard, starting from the original data matrix (D), we have two options:
+- use the super-indicator matrix (S):
+	this matrix is a 'spread-out' version of D, in which multi-category variables
+	are converted in as many dummy variables (1/0) as the number of categories .
+	Each observation (row) will have a large series of 1/0 responses.
+- use the so-called Burt matrix: 
+	Burt matrix is a derivation of the super-indicator matrix (S*S^T). 
+
+FactoMineR MCA (which easyAnalysis is based on) applies CA on the indicator matrix.
+If MCA is applied on the Burt matrix, we have to keep in mind that the
+Burt matrix will lead to an underestimation of 
+the inertia associated with the first dimensions. 
+This problem led to the necessity to adjust the Burt matrix, in order to mitigate it.
+By applying some adjustement to the Burt matrix, it is possible to mitigate the inflationary effect that MCA has when applied to
+the ordinary Burt matrix. 
+
+ 
+GRAPHICAL INTERPRETATION OF MCA
+Mulitple Correspondence Analysis is a statistical technique that takes as input nominal categorical data, and applies a series of trasformations and algebrical scompositions that culminate with a new representation of the data. Both individuals and variable categories 
+are assigned a set of biplot coordinates, that allow to get a visual intuition about which underlying associations are hidden in the data. 
+The assumption we want to be guaranteed is that the final map has a good enough spacial fidelity to the underlying associations between the individuals and the variable categories. That is, we want an individual to be spacially close to the category it is in, which, 
+by the triangle inequality, would imply that individuals falling in the same categories would be spacially close, 
+and categories sharing the same individuals would be close as well. This concept is refered to as homogeneity.
+In this regards, MCA reaches the highest level of homogeneity, thus the highest level of fidelity in the visual representation of the 
+underlying associations between individuals and categories.
+
+
