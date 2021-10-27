@@ -18,13 +18,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-WHAT?
+##WHAT?
 The goal of easyAnalysis is to provide an interface for implementing different types of analysis on qualitative data. The focus is on making the analysis as ease as possible, by abstracting away any low-level implementation and giving the analyst visual control over the analysis pipeline.
-WHY? 
+##WHY? 
 One: code-free! easyAnalysis makes the analysis independent of the analysts' programming skills;
 Two: 'intelligence' is king! easyAnalysis helps to focus on the 'intelligence' part of the problem, using advanced analysis techniques without the need to worry about complex technical implementations;
 Three: try and retry! Lengthy scripts tend to hinder the analysis flexibility and reproducibility. Since data analysis is a process of trial and error, reproducibility of the pipeline is a fundamental driver for extracting good insights. The visual interface of easyAnalysis provides all the reproducibility you need to elevate your skills as an insight chaser! 
-WHEN? 
 
 ## Installation
 
@@ -56,29 +55,17 @@ In brief, MCA can be a useful tool if we want to understand how responses from a
   in the context of multiple correspondence analysis,
   a variable is said to be supplementary when it does not influence the 
   resulting    biplot coordinates. We might wish to include a variable as            supplementary when we   want to study how that variable can be explained in 
-  terms of the factors being     extracted, without influencing those factors. 
+  terms of the factors being     extracted, without influencing those factors.
+  
+  
+# cos2
+ In the context of MCA, cos2 is a value in the interval [0, 1] associated with a    given entity (a variable, or an individual), that measures how important a         particular dimension is for that entity.  Each entity is assigned multiple         measures of cos2, one for each dimension extracted from the MCA. 
+ Cos2 can be useful for interpreting the dimensions of an MCA. In general,  if      variables are the entities,  we can interpret a dimension by looking at which      entities have the strongest cos2. 
+
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-library(easyAnalysis)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
 
 You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/master/examples>.
 
-You can also embed plots, for example:
 
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
