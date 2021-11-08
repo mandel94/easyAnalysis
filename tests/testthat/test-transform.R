@@ -1,8 +1,8 @@
 
 # Inputs  -----------------------------------------------------------------
 
-DF <- read_inst("inst/ test-imported_data")
-display_DF <- read_inst("inst/ test-display_DF")
+DF <- read_inst("inst/test-imported_data")
+display_DF <- read_inst("inst/test-display_DF")
 
 
 
@@ -65,8 +65,6 @@ test_that("minimum_variance_filter works for categoricals", {
   expect_true("categorical" %in% names(display_DF))
 })
 
-
-DF <- read_inst(" test-display_DF")
 
 test_that("logic_NOT returns right logic", {
   bin_var <- test_get_yes_no_DF(100, 1)
@@ -140,3 +138,4 @@ test_that("variance_binary returns expected results", {
   out <- variance_binary(test_binary)
   expect_equal(out, variance)
 })
+

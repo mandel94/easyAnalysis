@@ -18,7 +18,9 @@ selectVars_UI <- function(id) {
   tagList(
     uiOutput(ns("select_ui")),
     actionButton(ns("include"), "Include selected variables"),
-    actionButton(ns("clear"), "Clear")
+    actionButton(ns("clear"), "Clear"),
+    hr(),
+    prettyCheckbox(ns("remove_NA"), "Remove rows with NA's", shape = "round")
   )
 }
 
@@ -58,9 +60,6 @@ selectVars_server <- function(id,
 
     output$select_ui <- renderUI({
       ns <- session$ns
-
-
-
       selectInput(ns("select_list"),
                   "Select variables",
                   multiple = TRUE,
@@ -71,11 +70,17 @@ selectVars_server <- function(id,
     })
 
     selected_vars <- reactive({
+
       if(is.null(isolate(imported())))
         NULL
       else
         input$select_list
     })
+
+    chosen_vars <- reactive(c("ID_CODE", selected_vars()))
+
+
+# Observers ---------------------------------------------------------------
 
     observeEvent(input$include, {
       # Trigger reaction of downstream dependencies
@@ -89,7 +94,19 @@ selectVars_server <- function(id,
                 clear_bttn(clear_bttn() + 1)
     })
 
-    selected(isolate(selected_vars()))
 
+    observeEvent(input$remove_NA, {
+
+      req(nrow(display_DF()) > 0)
+      if(input$remove_NA) {
+        foo <- display_DF() %>%
+          remove_rows_with_NAs()
+        display_DF(foo)
+        rm(foo)
+      } else {
+        display_DF(imported_DF()[, chosen_vars()])
+      }
+
+    })
   })
 }

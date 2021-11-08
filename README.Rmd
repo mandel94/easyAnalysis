@@ -34,10 +34,45 @@ install.packages("easyAnalysis")
 ```
 
 
-## Rules to follow 
+## Things you should know
 
-1 The identifier should be the first column of the imported data frame; 
-2 The application only support csv files. 
+* The **identifier** should be the **first column** of the imported data frame;
+* easyAnalysis supports only **.csv files**;
+* As for the data, easyAnalysis currently supports two types of data, coherently 
+  to the only type of analysis it can perform (MCA):
+    + binary data (in the '1/0' or 'yes/no' formats);
+    + multi-categorical data.
+
+
+## How to use easyAnalysis 
+
+Let's explore the different sections of the user interface. 
+
+## Import
+
+### **Select CSV file**
+
+here you can browse your local system for a **CSV file** to load.
+
+### Import
+
+Click here to import into the application the CSV file you previously uploaded. 
+
+### Select variables
+
+Once the data has been imported, the list of variables will be available here. Select all the variables you are interested in. 
+
+### Include selected variables
+
+Click here and a table with imported data for the variables you selected will display on the left side of the screen. 
+
+### Clear
+
+Click here to clear the currently displayed table (only the ID_CODE will display) 
+
+### Remove rows with NA's
+
+Check this box if you want to remove all rows with at least one missing value. This is a pretty brutal approach, as you are likely to lose a lot of usable information. We recommend that you consider imputation methods for filling missing values (easyAnalysis does not currently support imputation methods in its interface).
 
 
 # Glossary

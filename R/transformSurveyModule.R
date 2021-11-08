@@ -89,7 +89,6 @@ transformSurvey_server <- function(id,
 
     output$vars_pool <- renderUI({
       ns <- session$ns
-
       selectInput(
         ns("selected"),
         "Pool of variables",

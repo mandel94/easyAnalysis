@@ -4,10 +4,13 @@
 \alias{transformSurvey_server}
 \title{Server-side Processing for Applying Transformations to Current Data Frame}
 \usage{
-transformSurvey_server(id, display_DF, displayed_vars)
+transformSurvey_server(id, imported_DF, display_DF, displayed_vars)
 }
 \arguments{
 \item{id}{Module's ID for namespacing}
+
+\item{imported_DF}{Reactive value returning the currently imported data
+frame.}
 
 \item{display_DF}{Reactive value returning the data frame to be displayed,
 updated with current selected variables and applied transformations}

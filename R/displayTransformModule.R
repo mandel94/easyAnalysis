@@ -26,8 +26,7 @@ displayTransform_UI <- function(id) {
 
 
 displayTransform_server <- function(id,
-                                    display_DF,
-                                    displayed_vars) {
+                                    display_DF) {
   moduleServer(id, function(input, output, session) {
 
     output$table <- renderTable({

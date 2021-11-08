@@ -4,13 +4,15 @@
 \alias{importData_server}
 \title{Server-side Processing for Importing Data}
 \usage{
-importData_server(id, imported)
+importData_server(id, imported, imported_DF)
 }
 \arguments{
 \item{id}{Module's ID for namespacing}
 
-\item{imported}{reactive value containing up-to-date data imported by the user
+\item{imported}{Reactive value containing up-to-date data imported by the user
 (this is shared among modules)}
+
+\item{imported_DF}{Reactive value returning currently imported data frame.}
 }
 \description{
 Server-side Processing for Importing Data

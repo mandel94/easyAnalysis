@@ -1,6 +1,7 @@
 #' @import dplyr
-#' @importFrom stringr str_extract str_detect
-#' @importFrom purrr map map_df
+#' @importFrom stringr str_extract str_detect str_c
+#' @importFrom purrr map map_df map_lgl
+
 
 
 
@@ -27,7 +28,8 @@ test <-
 #'
 
 get_descriptive_binaries <- function(DF) {
-  DF <- DF %>%
+  i <- 1
+  DF %>%
     map_df(to_yes_no)
 }
 
@@ -35,7 +37,7 @@ get_descriptive_binaries <- function(DF) {
 to_yes_no <- function(array_) {
   is_descriptive <-
     regexpr("(^yes$)|(^no$)", array_, ignore.case = TRUE)
-  if (all(is_descriptive == 1)) {
+  if (all(is_descriptive == 1, na.rm = TRUE)) {
     array_
   } else {
     sapply(array_, set_value)
@@ -51,6 +53,22 @@ set_value <- function(v) {
     v
 }
 
+#' remove_rows_with_NAs
+#'
+#' This function takes a data frame as input, and removes all rows having at
+#'  at least one missing value.
+#'
+#' @param DF A data frame
+#' @return A data frame
+
+remove_rows_with_NAs <- function(DF) {
+  to_keep <-
+    DF %>%
+    map_df(function(x) is.na(x)) %>%
+    rowSums(na.rm = TRUE) %>%
+    map_lgl(function(s) s == 0)
+  DF[to_keep, ]
+}
 
 
 # TRANSFORMATION UTILITIES ------------------------------------------------
@@ -293,14 +311,25 @@ is_binary <- function(array_) {
 
 # MCA UTILITIES -----------------------------------------------------------
 
-# Utility for getting MCA output for active variables
-get_var_output <- function(MCA) {
+#' Utility for getting MCA output for active variables
+#'
+#' @param MCA MCA object
+#' @param labeled_values Array, with values labeled by category
+#'
+
+
+get_var_output <- function(MCA, labeled_values) {
   return_list <- list()
+
+  MCA[["var"]]
+
   for (out in c("coord", "contrib", "cos2")) {
-    return_list[[out]] <- MCA[["var"]][[out]]
+    return_list[[out]] <- add_labeled_values(MCA[["var"]][[out]], labeled_values)
   }
   for (out in c("quali.sup", "quanti.sup")) {
-    return_list[[out]] <- MCA[[out]]$coord
+    out_DF <- add_labeled_values(MCA[[out]]$coord, labeled_values)
+    if(!is.null(out_DF))
+     return_list[[out]] <- out_DF
   }
   return_list
 }
@@ -403,6 +432,59 @@ merge_qualiquanti <- function(out, qualiquanti_out) {
   out_ext
 }
 
+
+#' Add Labeled Rownames
+#'
+#' When applying MCA, original category names are pre-appended to the
+#'  answer only for binary variables. This function is used for changing the row
+#'  names of the input DF, pre-appending the category names for all types of
+#'  variable.
+#'
+#'
+#' @param DF A data frame
+#' @param labeled_values Array, with values labeled by category
+#'
+#' @return A data frame, the same as the input one, but with rownames modified
+#'  with the labeled version of variable values.
+
+add_labeled_values <- function(DF, labeled_values) {
+  # FIND A MATCH BETWEEN ROWNAMES AND LABELED_VALUES, THAT IS,
+  # FOR EACH ROWNAME, THE INDEX OF THE MATCHING LABELED VALUE
+  mapping <- map_rownames_to_labeled_values(DF, labeled_values)
+  # MAP THE ROWNAME TO THE LABELED_VALUE
+  for (i in seq_along(row.names(DF))) {
+    rownames(DF)[i] <- labeled_values[mapping[i]]
+  }
+
+  DF
+}
+
+get_labeled_values <- function(DF) {
+  long_table <- tidyr::pivot_longer(DF, !all_of("ID_CODE"), "categories")
+  long_table$value[is.na(long_table$value)] <- "NA"
+  labeled_values <- str_c(long_table$categories, long_table$value, sep = "_")
+  return(unique(labeled_values))
+}
+
+# Get the mapping between the rownames and the labeled value
+map_rownames_to_labeled_values <- function(DF, labeled_values) {
+  foo <- sapply(row.names(DF), function(x) get_match_index(x, labeled_values))
+  return(unlist(foo))
+}
+
+#' Find which labeled_value match to a certain row name.
+get_match_index <- function(row_name, labeled_values) {
+  row_name <- str_replace(row_name, "\\.", "_")
+  split <- unlist(strsplit(row_name, "_"))
+  is_already_labeled <- length(split) >= 2
+  if (is_already_labeled) {
+    # ´grep(value = FALSE) returns a vector with the indices of the elements of
+    #  x that yielded a match´
+    which(labeled_values %in% row_name)
+  } else {
+    grep(paste0("_", row_name, "$"), labeled_values)
+  }
+}
 
 # VALIDATION UTILITIES  ---------------------------------------------------
 
@@ -781,3 +863,33 @@ create_eigen_ggplot <- function(eigenvalues) {
 add_qualiquanti_color <- function(data_, colour) {
   geom_point(data = data_, aes(dim_x, dim_y), color = colour)
 }
+
+
+
+# Validation  -------------------------------------------------------------
+
+#' Get Validated Data Frame
+#'
+#' Take a data frame, and remove all columns belonging to a predefined set of
+#'  data types.
+#'
+#' @param DF A data frame
+#'
+#' @return A data frame
+
+get_validated_DF <- function(DF) {
+  to_keep_idx <- DF %>%
+    map_lgl(is_to_keep)
+  to_keep <- names(DF)[to_keep_idx]
+  DF <- select(DF, all_of(to_keep))
+  return(DF)
+}
+
+
+is_to_keep <- function(array_) {
+  type <- typeof(array_)
+  types_to_remove <- c("numeric", "complex", "double", "raw", "list", "closure",
+                       "special", "builtin", "environment", "S4")
+  return(ifelse(type %in% types_to_remove, FALSE, TRUE))
+}
+

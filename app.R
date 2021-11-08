@@ -52,8 +52,7 @@ easyAnalysis <- function() {
     )
 
     displayTransform_server("display_transform",
-                            display_DF,
-                            displayed_vars)
+                            display_DF)
 
     controlMCA_server("MCA_control",
                       display_DF,

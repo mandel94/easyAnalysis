@@ -36,7 +36,9 @@ importData_server <- function(id, imported, imported_DF) {
   moduleServer(id, function(input, output, session) {
       data_ <- reactive({
       req(!is.null(input$csv_file$datapath))
-      imported_data <- data.table::fread(input$csv_file$datapath)
+      imported_data <- data.table::fread(input$csv_file$datapath, header = TRUE)
+      id <- imported_data[, 1]
+      imported_data <- get_validated_DF(imported_data)
       first_letter_uppercase <- function(str_) {
         first_letter <- substr(str_, 1, 1)
         substr(str_, 1, 1) <- toupper(first_letter)
@@ -48,6 +50,8 @@ importData_server <- function(id, imported, imported_DF) {
         map_chr(first_letter_uppercase)
       names(imported_data) <- c("ID_CODE", var_names)
       descriptive_data <- get_descriptive_binaries(imported_data)
+      descriptive_data[, 1, drop=FALSE] <- id
+      descriptive_data
     })
 
     names_ <- reactive({

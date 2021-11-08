@@ -84,7 +84,7 @@ read_inst <- function(file_name) {
 #' @param file_name Name of the file to be read
 
 save_inst <- function(obj, file_name) {
-  saveRDS(obj, paste("inst/", file_name))
+  saveRDS(obj, paste0("inst/", file_name))
 }
 
 does_info_match <- function(DF1, DF2) {

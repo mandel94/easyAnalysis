@@ -92,7 +92,6 @@ controlMCA_server <- function(id,
     # REACTIVES  ---------------------------------------------------------------
 
     active_DF <- reactive({
-
       if (input$start == 0)
         data.frame()
       else {
@@ -247,12 +246,10 @@ controlMCA_server <- function(id,
       eigenvalues(eigens())
     })
 
-
     # BUILD MCA ---------------------------------------------------------------
 
 
     quanti_idx <- reactive({
-
       if (length(input$quanti_vars) > 0) {
         quanti_input_idx <- which(displayed_vars() %in% input$quanti_vars) - 1
         # Check which variable is numerical
@@ -299,6 +296,7 @@ controlMCA_server <- function(id,
                                 class = "warning"))
         validate(need(diff() >= 2, ""))
       }
+
       FactoMineR::MCA(
         display_DF()[, -1],
         quanti.sup = quanti_idx(),
@@ -315,14 +313,14 @@ controlMCA_server <- function(id,
     # ...
     # When entities are variables
     MCA_var_output <- reactive({
+      req(names(display_DF()) != "ID_CODE")
+      labeled_vals <- get_labeled_values(display_DF())
       # List, each element with 5 columns (and category as rownames)
-      get_var_output(MCA = MCA_res())
+      get_var_output(MCA = MCA_res(), labeled_vals)
     })
 
     # When entities are individuals
     MCA_ind_output <- reactive({
-
-
       id <- display_DF()[, 1][[1]]
       ind_output <- get_ind_output(MCA = MCA_res())
 
