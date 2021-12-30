@@ -7,19 +7,22 @@
 
 <!-- badges: end -->
 
-## WHAT?
+## WHAT?  
 
 The goal of easyAnalysis is to provide an interface for implementing
 different types of analysis on qualitative data. The focus is on making
 the analysis as ease as possible, by abstracting away any low-level
 implementation and giving the analyst visual control over the analysis
-pipeline. \#\# WHY? One: code-free\! easyAnalysis makes the analysis
-independent of the analysts’ programming skills; Two: ‘intelligence’ is
-king\! easyAnalysis helps to focus on the ‘intelligence’ part of the
+pipeline.   
+## WHY?  
+
+1. You're going to get free from code! easyAnalysis makes the analysis
+independent of the analysts’ programming skills; 
+2. The ‘insight’ is the center of the universe here\! easyAnalysis helps to focus on the ‘intelligence’ part of the
 problem, using advanced analysis techniques without the need to worry
-about complex technical implementations; Three: try and retry\! Lengthy
-scripts tend to hinder the analysis flexibility and reproducibility.
-Since data analysis is a process of trial and error, reproducibility of
+about complex technical implementations; 
+3. Don't you find anything interesting in the data? Give it another try! You can just re-toggle to the import section, consider a new combination of variables, apply different transformations, and feed the factorial analysis with a handful of new fresh ingredients. You can reinvent the pipeline at the cost of a few clicks!  
+Scripts tend to hinder the analysis' flexibility and reproducibility. Since data analysis is often a process of trial and error, reproducibility of
 the pipeline is a fundamental driver for extracting good insights. The
 visual interface of easyAnalysis provides all the reproducibility you
 need to elevate your skills as an insight chaser\!
