@@ -10,8 +10,8 @@
 ## WHAT?  
 
 The goal of easyAnalysis is to provide an interface for implementing
-different types of analysis on qualitative data. The focus is on making
-the analysis as ease as possible, by abstracting away any low-level
+factorial analysis of qualitative data. The focus is on making
+the analysis as easy as possible, by abstracting away any low-level
 implementation and giving the analyst visual control over the analysis
 pipeline.   
 ## WHY?  
